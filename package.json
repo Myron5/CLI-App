@@ -1,0 +1,31 @@
+{
+  "name": "node-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json",
+    "start": "npm run build && node dist/index.js",
+    "dev": "nodemon",
+    "list": "node dist/index.js --action='list'",
+    "get": "node dist/index.js --action='get'",
+    "add": "node dist/index.js --action='add'",
+    "remove": "node dist/index.js --action='remove'"
+  },
+  "keywords": [],
+  "author": "myron <melnykmyron1808@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "@types/yargs": "^17.0.24",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "nanoid": "^3.3.4",
+    "yargs": "^17.7.2"
+  }
+}
