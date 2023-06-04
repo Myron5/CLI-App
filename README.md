@@ -1,6 +1,6 @@
 # CLI-App
 
-<img src="https://monosnap.com/image/cj7SA7B6ZuBCm7LtsScytsV2NvNj3L"/>
+<img src="https://monosnap.com/image/8o3LjnauxfkNOKhq8Am47g48pJKTkW"/>
 
 <img src="https://monosnap.com/image/i9LGcpROECsdXO61FmiF76ev4apoo2"/>
 
