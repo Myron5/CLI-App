@@ -1,10 +1,6 @@
 import yargs from "yargs";
-import {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-} from "./contacts";
+import { contactsAPI } from "./contacts";
+
 import { IAction } from "types";
 
 const argv = yargs(process.argv.slice(2)).options({
@@ -17,10 +13,11 @@ const argv = yargs(process.argv.slice(2)).options({
 
 invokeAction(argv as IAction);
 
-// ---------------------------------------------- GET ALL HANDLER ----------------------------------------------
+// ---------------- GET ALL HANDLER ----------------
 
 function listContactsHandler() {
-  listContacts()
+  contactsAPI
+    .listContacts()
     .then((data) => {
       console.log(data);
     })
@@ -29,7 +26,7 @@ function listContactsHandler() {
     });
 }
 
-// ---------------------------------------------- GET ONE HANDLER ----------------------------------------------
+// ---------------- GET ONE HANDLER ----------------
 
 function getContactByIdHandler(id: string | undefined) {
   if (!id) {
@@ -37,7 +34,8 @@ function getContactByIdHandler(id: string | undefined) {
     return;
   }
 
-  getContactById(id)
+  contactsAPI
+    .getContactById(id)
     .then((data) => {
       console.log(data);
     })
@@ -46,7 +44,7 @@ function getContactByIdHandler(id: string | undefined) {
     });
 }
 
-// ---------------------------------------------- DLETE HANDLER ----------------------------------------------
+// ---------------- DLETE HANDLER ----------------
 
 function removeContactHandler(id: string | undefined) {
   if (!id) {
@@ -54,7 +52,8 @@ function removeContactHandler(id: string | undefined) {
     return;
   }
 
-  removeContact(id)
+  contactsAPI
+    .removeContact(id)
     .then((contact) => {
       console.log("Successfully deleted");
       console.log(contact);
@@ -64,7 +63,7 @@ function removeContactHandler(id: string | undefined) {
     });
 }
 
-// ---------------------------------------------- ADD HANDLER ----------------------------------------------
+// ---------------- ADD HANDLER ----------------
 
 function addContactHandler(
   name: string | undefined,
@@ -81,7 +80,8 @@ function addContactHandler(
     return;
   }
 
-  addContact(name, email, phone)
+  contactsAPI
+    .addContact(name, email, phone)
     .then((contact) => {
       console.log("Successfully added");
       console.log(contact);
@@ -91,7 +91,7 @@ function addContactHandler(
     });
 }
 
-// ---------------------------------------------- INVOKE ACTION ----------------------------------------------
+// ---------------- INVOKE ACTION ----------------
 
 function invokeAction({ action, id, name, email, phone }: IAction) {
   switch (action) {

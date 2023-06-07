@@ -1,63 +1,71 @@
-// const { promises: fs } = require("fs");
-// const path = require("path");
-import { promises as fs } from "fs";
-import * as path from "path";
-import { nanoid } from "nanoid";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import { randomUUID } from "node:crypto";
 import { IContact } from "types";
 
-const contactsPath = path.join(__dirname, "../", "src", "db", "contacts.json");
+class ContactsAPI {
+  private contactsPath: string;
 
-// ---------------------------------------------- GET ALL ----------------------------------------------
+  constructor() {
+    this.contactsPath = path.join(
+      __dirname,
+      "../",
+      "src",
+      "db",
+      "contacts.json"
+    );
+  }
 
-export const listContacts = async (): Promise<IContact[]> => {
-  const buffer: Buffer = await fs.readFile(contactsPath);
-  const str: string = buffer.toString();
-  const data: IContact[] = JSON.parse(str);
-  return data;
-};
+  // ---------------- GET ALL ----------------
+  async listContacts(): Promise<IContact[]> {
+    const result = JSON.parse(await fs.readFile(this.contactsPath, "utf-8"));
+    if (!result) throw new Error("\x1B[31m Contacts wasn't found");
+    return result;
+  }
 
-// ---------------------------------------------- GET ONE ----------------------------------------------
+  // ---------------- GET ONE ----------------
+  async getContactById(contactId: string): Promise<IContact> {
+    const contacts: IContact[] = await this.listContacts();
 
-export const getContactById = async (contactId: string): Promise<IContact> => {
-  const contacts = await listContacts();
-  if (!contacts) throw new Error("\x1B[31m Contacts wasn't found");
+    const contact: IContact | undefined = contacts.find(
+      (contact) => contact.id === contactId
+    );
+    if (!contact) throw new Error("\x1B[31m There is no such contact");
 
-  const contact = contacts.find((contact) => contact.id === contactId);
-  if (!contact) throw new Error("\x1B[31m There is no such contact");
+    return contact;
+  }
 
-  return contact;
-};
+  // ---------------- DELETE ----------------
+  async removeContact(contactId: string): Promise<IContact> {
+    const contacts: IContact[] = await this.listContacts();
 
-// ---------------------------------------------- DELETE ----------------------------------------------
+    const index: number = contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+    if (index === -1) throw new Error("\x1B[31m There is no such contact");
+    const [delContact]: IContact[] = contacts.splice(index, 1);
 
-export const removeContact = async (contactId: string): Promise<IContact> => {
-  const contacts = await listContacts();
-  if (!contacts) throw new Error("\x1B[31m Contacts wasn't found");
+    await fs.writeFile(this.contactsPath, JSON.stringify(contacts));
 
-  const idx = contacts.findIndex((contact) => contact.id === contactId);
-  if (!~idx) throw new Error("\x1B[31m There is no such contact");
-  const [delContact] = contacts.splice(idx, 1);
+    return delContact;
+  }
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  // ---------------- ADD ----------------
+  async addContact(
+    name: string,
+    email: string,
+    phone: string
+  ): Promise<IContact> {
+    const contacts: IContact[] = await this.listContacts();
 
-  return delContact;
-};
+    const id: string = randomUUID();
+    const newContact: IContact = { id, name, email, phone };
+    contacts.push(newContact);
 
-// ---------------------------------------------- ADD ----------------------------------------------
+    await fs.writeFile(this.contactsPath, JSON.stringify(contacts));
 
-export const addContact = async (
-  name: string,
-  email: string,
-  phone: string
-): Promise<IContact> => {
-  const contacts = await listContacts();
-  if (!contacts) throw new Error("\x1B[31m Contacts wasn't found");
+    return newContact;
+  }
+}
 
-  const id = nanoid();
-  const newContact: IContact = { id, name, email, phone };
-  contacts.push(newContact);
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-  return newContact;
-};
+export const contactsAPI = new ContactsAPI();
