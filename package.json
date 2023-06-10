@@ -11,7 +11,11 @@
     "list": "node dist/index.js --action='list'",
     "get": "node dist/index.js --action='get'",
     "add": "node dist/index.js --action='add'",
-    "remove": "node dist/index.js --action='remove'"
+    "remove": "node dist/index.js --action='remove'",
+    "list-ts": "ts-node src/index.ts --action='list'",
+    "get-ts": "ts-node src/index.ts --action='get'",
+    "add-ts": "ts-node src/index.ts --action='add'",
+    "remove-ts": "ts-node src/index.ts --action='remove'"
   },
   "keywords": [],
   "author": "myron <melnykmyron1808@gmail.com>",

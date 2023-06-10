@@ -1,7 +1,5 @@
-export interface IAction {
-  action: string | undefined;
-  id: string | undefined;
-  name: string | undefined;
-  email: string | undefined;
-  phone: string | undefined;
+import { IContact } from "./IContact";
+
+export interface IAction extends IContact {
+  action: string;
 }
