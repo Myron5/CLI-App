@@ -39,10 +39,11 @@ class ContactsAPI {
       removeContact: this.promiseWrapper<
         Parameters<removeType>,
         ReturnType<removeType>
-      >(this.removeContact),
+      >(this.removeContact, "Successfully deleted"),
 
       addContact: this.promiseWrapper<Parameters<addType>, ReturnType<addType>>(
-        this.addContact
+        this.addContact,
+        "Successfully added"
       ),
     };
   }
